@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import { TextField, Button, FormHelperText, FormControl, InputLabel, Input } from '@mui/material';
+import { TextField, Button, FormHelperText, FormControl } from '@mui/material';
 
-const Age: React.FC = () => {
+interface AgeProps {
+  onNext: (age: number | '') => void; // Added onNext prop
+}
+
+const Age: React.FC<AgeProps> = ({ onNext }) => {
   const [age, setAge] = useState<number | ''>('');
   const [error, setError] = useState<string | null>(null);
 
@@ -21,16 +25,23 @@ const Age: React.FC = () => {
     }
   };
 
+  const handleNextClick = () => {
+    if (error === null) {
+      onNext(age); // Call onNext with the current age value
+    }
+  };
+
   return (
     <>
       <div className="form-container">
         <FormControl fullWidth sx={{ width: '50%', margin: '0 auto' }}>
-        <TextField  label="How old are you" variant="outlined"  id="age"
-            type="number"
-            value={age}
-            onChange={handleAgeChange}
+          <TextField 
+            label="How old are you" 
+            variant="outlined" 
+            type="number" 
+            value={age} 
+            onChange={handleAgeChange} 
             error={Boolean(error)} 
-           
           />
           {error && <FormHelperText error>{error}</FormHelperText>}
         </FormControl>
@@ -48,6 +59,7 @@ const Age: React.FC = () => {
         <Button
           variant="contained"
           disabled={Boolean(error)}
+          onClick={handleNextClick}
         >
           Next
         </Button>

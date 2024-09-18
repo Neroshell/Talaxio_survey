@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 export const multiStepContext = React.createContext<any>(null);
 
 const ContextStep: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentStep, setStep] = useState(1);
+  const [currentStep, setStep] = useState(0); // Initialize to 0
   const [userData, setUserData] = useState<any[]>([]);
   const [finalData, setFinalData] = useState<any[]>([]);
 
