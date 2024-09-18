@@ -8,7 +8,8 @@ import FirstCar from './components/FirstCar';
 import DriveTrain from './components/DriveTrain';
 import FuelEmissions from './components/FuelEmissions';
 import FamilyCars from './components/FamilyCars';
-import ThankYou from './components/FinalThanks'; // Adjust the import path if necessary
+import ThankYou from './components/FinalThanks';
+import EachCar from './components/EachCar';
 import './App.css';
 import { multiStepContext } from './components/ContextStep';
 
@@ -29,7 +30,7 @@ function App() {
 
   const handleAgeNext = (age: number | '') => {
     if (age === '') {
-      return; // Do nothing if age is not set
+      return;
     }
     if (age < 18) {
       setStep(8); // Go to Thank You step
@@ -44,6 +45,10 @@ function App() {
     } else {
       setStep(3); // Go to First Car step
     }
+  };
+
+  const handleEachCarNext = () => {
+    setStep(8); // Go to Thank You step
   };
 
   const getStepContent = (stepIndex: number) => {
@@ -63,9 +68,15 @@ function App() {
       case 6:
         return <FamilyCars />;
       case 7:
-        return <ThankYou message='I appreciate' />;
+        return (
+          <EachCar
+            carIndex={0} // Pass appropriate carIndex
+            onCarDetailsChange={() => {}}
+            onNext={handleEachCarNext} // Call handleEachCarNext on Next
+          />
+        );
       case 8:
-        return <ThankYou message='You are under 18 or do not own a driving license. Thank you for participating!' />;
+        return <ThankYou message='You have finished. Thank you for participating!' />;
       default:
         return <div>Unknown step</div>;
     }

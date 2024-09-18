@@ -1,14 +1,15 @@
 import React, { useState, useContext } from 'react';
-import { FormControl, InputLabel, MenuItem, Select, Button, FormHelperText } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select, Button, FormHelperText, SelectChangeEvent } from '@mui/material';
 import { multiStepContext } from './ContextStep'; // Adjust the import path if necessary
 
 const Gender: React.FC = () => {
   const { currentStep, setStep } = useContext(multiStepContext);
-  const [selectedGender, setSelectedGender] = useState<string | ''>('');
+  const [selectedGender, setSelectedGender] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
-  const handleGenderChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedGender(event.target.value as string);
+  // Use SelectChangeEvent for the event type
+  const handleGenderChange = (event: SelectChangeEvent<string>) => {
+    setSelectedGender(event.target.value);
     setError(null); // Clear error when a valid option is selected
   };
 
@@ -34,7 +35,7 @@ const Gender: React.FC = () => {
           labelId="gender-select-label"
           id="gender-select"
           value={selectedGender}
-          onChange={handleGenderChange}
+          onChange={handleGenderChange} // Updated event type
           label="Select your gender"
         >
           <MenuItem value="male">Male</MenuItem>
