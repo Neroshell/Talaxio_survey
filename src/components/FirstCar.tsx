@@ -2,25 +2,33 @@ import React, { useState, useContext } from 'react';
 import { FormControl, FormControlLabel, Radio, RadioGroup, FormLabel, Button, FormHelperText } from '@mui/material';
 import { multiStepContext } from './ContextStep'; // Adjust the import path if necessary
 
-const FirstCar: React.FC = () => {
-  const { currentStep, setStep } = useContext(multiStepContext);
-  const [selectedFirstCar, setSelectedFirstCar] = useState<string | null>(null);
+interface FirstCarProps {
+  onNext: () => void; // Define the type of the onNext prop
+}
+
+const FirstCar: React.FC<FirstCarProps> = ({ onNext }) => {
+  const { currentStep, setStep, userData, setUserData } = useContext(multiStepContext); // Access context
   const [error, setError] = useState<string | null>(null);
 
   const handleFirstCarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedFirstCar(event.target.value);
+    const firstCar = event.target.value;
+    setUserData({ ...userData, firstCar }); // Update context with selected first car status
     setError(null); // Clear error when a valid option is selected
   };
 
   const handleNext = () => {
-    if (!selectedFirstCar) {
+    if (!userData.firstCar) {
       setError('Please select an option.');
       return;
     }
 
-    if (selectedFirstCar === 'yes') {
+    if (userData.firstCar === 'yes') {
+      // Update the context or do any additional logic here if needed
+      onNext(); // Call the onNext function passed as a prop
       setStep(8); // Go to Thank You step if 'Yes' is selected
-    } else if (selectedFirstCar === 'no') {
+    } else if (userData.firstCar === 'no') {
+      // Update the context or do any additional logic here if needed
+      onNext(); // Call the onNext function passed as a prop
       setStep(currentStep + 1); // Go to DriveTrain step if 'No' is selected
     }
   };
@@ -37,8 +45,8 @@ const FirstCar: React.FC = () => {
         <RadioGroup
           aria-label="first-car"
           name="first-car"
-          value={selectedFirstCar || ''}
-          onChange={handleFirstCarChange}
+          value={userData.firstCar || ''} // Controlled input from context
+          onChange={handleFirstCarChange} // Update context with the selected value
         >
           <FormControlLabel value="yes" control={<Radio />} label="Yes" />
           <FormControlLabel value="no" control={<Radio />} label="No" />
@@ -59,7 +67,7 @@ const FirstCar: React.FC = () => {
         <Button
           variant="contained"
           onClick={handleNext}
-          disabled={!selectedFirstCar}
+          disabled={!userData.firstCar} // Disable the button if no option is selected
         >
           Next
         </Button>

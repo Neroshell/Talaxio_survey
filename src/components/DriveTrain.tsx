@@ -4,23 +4,24 @@ import { multiStepContext } from './ContextStep'; // Adjust the import path if n
 import './components.css'; // Import your CSS file
 
 const DriveTrain: React.FC = () => {
-  const { currentStep, setStep } = useContext(multiStepContext);
-  const [drivetrain, setDrivetrain] = useState<string | null>(null);
-  const [familyCars, setFamilyCars] = useState<number | ''>('');
+  const { currentStep, setStep, userData, setUserData } = useContext(multiStepContext); // Access context
   const [error, setError] = useState<string | null>(null);
 
-  // Update the event type to SelectChangeEvent
+  // Update the drivetrain preference in the context
   const handleDrivetrainChange = (event: SelectChangeEvent) => {
-    setDrivetrain(event.target.value as string);
+    const drivetrain = event.target.value as string;
+    setUserData({ ...userData, drivetrain }); // Update context with drivetrain preference
     setError(null); // Clear error when valid input is selected
   };
 
+  // Update the number of family cars in the context
   const handleFamilyCarsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFamilyCars(event.target.value === '' ? '' : Number(event.target.value));
+    const familyCars = event.target.value === '' ? '' : Number(event.target.value);
+    setUserData({ ...userData, familyCars }); // Update context with family cars count
   };
 
   const handleNext = () => {
-    if (!drivetrain || familyCars === '') {
+    if (!userData.drivetrain || userData.familyCars === '') {
       setError('Please complete all fields.');
       return;
     }
@@ -37,8 +38,8 @@ const DriveTrain: React.FC = () => {
         <FormLabel sx={{ fontWeight: 'bold' }}>Which drivetrain do you prefer?</FormLabel>
         <Select
           sx={{ height: '40px'}}
-          value={drivetrain || ''}
-          onChange={handleDrivetrainChange} // Correct type applied
+          value={userData.drivetrain || ''} // Controlled input from context
+          onChange={handleDrivetrainChange}
           variant="outlined"
           fullWidth
         >
@@ -52,7 +53,7 @@ const DriveTrain: React.FC = () => {
         <FormLabel sx={{ fontWeight: 'bold' }}>How many cars do you have in your family?</FormLabel>
         <TextField
           type="number"
-          value={familyCars}
+          value={userData.familyCars}
           onChange={handleFamilyCarsChange}
           variant="outlined"
           fullWidth
@@ -73,7 +74,7 @@ const DriveTrain: React.FC = () => {
         <Button
           variant="contained"
           onClick={handleNext}
-          disabled={!drivetrain || familyCars === ''}
+          disabled={!userData.drivetrain || userData.familyCars === ''}
         >
           Next
         </Button>

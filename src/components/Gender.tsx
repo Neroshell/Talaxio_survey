@@ -3,18 +3,17 @@ import { FormControl, InputLabel, MenuItem, Select, Button, FormHelperText, Sele
 import { multiStepContext } from './ContextStep'; // Adjust the import path if necessary
 
 const Gender: React.FC = () => {
-  const { currentStep, setStep } = useContext(multiStepContext);
-  const [selectedGender, setSelectedGender] = useState<string>('');
+  const { currentStep, setStep, userData, setUserData } = useContext(multiStepContext); // Access context
   const [error, setError] = useState<string | null>(null);
 
-  // Use SelectChangeEvent for the event type
   const handleGenderChange = (event: SelectChangeEvent<string>) => {
-    setSelectedGender(event.target.value);
+    const selectedGender = event.target.value;
+    setUserData({ ...userData, gender: selectedGender }); // Store gender in context
     setError(null); // Clear error when a valid option is selected
   };
 
   const handleNext = () => {
-    if (!selectedGender) {
+    if (!userData.gender) {
       setError('Please select a gender.');
       return;
     }
@@ -34,8 +33,8 @@ const Gender: React.FC = () => {
         <Select
           labelId="gender-select-label"
           id="gender-select"
-          value={selectedGender}
-          onChange={handleGenderChange} // Updated event type
+          value={userData.gender || ''} // Controlled input from context
+          onChange={handleGenderChange} // Update gender in context
           label="Select your gender"
         >
           <MenuItem value="male">Male</MenuItem>
@@ -58,7 +57,7 @@ const Gender: React.FC = () => {
         <Button
           variant="contained"
           onClick={handleNext}
-          disabled={!selectedGender}
+          disabled={!userData.gender} // Disable next if no gender is selected
         >
           Next
         </Button>

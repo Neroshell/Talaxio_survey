@@ -16,7 +16,7 @@ const steps = [
   'Age',
   'Gender',
   'Car License',
-  'First Car', // Move First Car to step 4
+  'First Car',
   'Drive Train',
   'Fuel Emissions',
   'Family Cars',
@@ -25,32 +25,50 @@ const steps = [
 ];
 
 function App() {
-  const { currentStep, setStep } = useContext(multiStepContext);
-  const [age, setAge] = useState<number | null>(null); // Track user's age
-  
+  const { currentStep, setStep, userData, setUserData } = useContext(multiStepContext); // Access context
+  const [thankYouMessage, setThankYouMessage] = useState<string | null>(null);
+  const [showIcon, setShowIcon] = useState<boolean>(true);
+
   // Handle Age Step Logic
   const handleAgeNext = (userAge: number | '') => {
     if (userAge === '' || isNaN(userAge)) {
       return; // Do nothing if the age is not provided or invalid
     }
-    setAge(userAge); // Save the age in state
+    setUserData(prev => ({ ...prev, age: userAge })); // Save the age in context
     if (userAge < 18) {
+      setThankYouMessage("We are targeting more experienced clients, thank you for your interest");
+      setShowIcon(false); // Optionally hide the icon
       setStep(8); // Go to Thank You step if under 18
     } else {
-      setStep(1); // Proceed to Gender step for age >= 18
+      setStep(1); // Proceed to Car License step for age >= 18
     }
   };
-  
+
   // Handle Car License Step Logic
   const handleCarLicenseNext = (licenseStatus: string) => {
     if (licenseStatus === 'no') {
-      setStep(8); // Go to Thank You step if no license
-    } else if (age !== null && age >= 18 && age <= 25) {
+      setThankYouMessage("Thank you for your interest");
+      setShowIcon(true); // Optionally hide the icon
+      setStep(8); // Go to Thank You step if no license or prefer transport
+    } else if (userData.age !== null && userData.age >= 18 && userData.age <= 25) {
       setStep(3); // Go to First Car step for age between 18 and 25
     } else {
       setStep(4); // Otherwise, go directly to Drive Train step
     }
   };
+
+  // Handle First Car Step Logic
+  const handleFirstCarNext = () => {
+    if (userData.firstCar === 'yes') {
+      setThankYouMessage("We are targeting more experienced clients, thank you for your interest");
+      setShowIcon(false); // Optionally hide the icon
+      setStep(8); // Go to Thank You step if 'Yes' is selected
+    } else if (userData.firstCar === 'no') {
+      setStep(4); // Go to Drive Train step if 'No' is selected
+    }
+  };
+
+
 
   // Handle Each Car Step Logic
   const handleEachCarNext = () => {
@@ -67,7 +85,7 @@ function App() {
       case 2:
         return <CarLicense onNext={handleCarLicenseNext} />;
       case 3:
-        return <FirstCar />; // First Car is now at step 4
+        return <FirstCar onNext={handleFirstCarNext} />;
       case 4:
         return <DriveTrain />;
       case 5:
@@ -83,7 +101,7 @@ function App() {
           />
         );
       case 8:
-        return <ThankYou message='The End. Thank you for participating!' />;
+        return <ThankYou message={thankYouMessage || 'Thank you for your participation!'} showIcon={showIcon} />;
       default:
         return <div>There is nothing here</div>;
     }

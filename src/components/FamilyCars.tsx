@@ -4,17 +4,17 @@ import { multiStepContext } from './ContextStep'; // Adjust the import path if n
 import './components.css'; // Import your CSS file
 
 const FamilyCars: React.FC = () => {
-  const { currentStep, setStep } = useContext(multiStepContext);
-  const [familyCars, setFamilyCars] = useState<number | ''>('');
+  const { currentStep, setStep, userData, setUserData } = useContext(multiStepContext); // Access context
   const [error, setError] = useState<string | null>(null);
 
   const handleFamilyCarsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFamilyCars(event.target.value === '' ? '' : Number(event.target.value));
+    const numberOfCars = event.target.value === '' ? '' : Number(event.target.value);
+    setUserData({ ...userData, familyCars: numberOfCars }); // Update context with number of family cars
     setError(null); // Clear error when valid input is entered
   };
 
   const handleNext = () => {
-    if (familyCars === '') {
+    if (userData.familyCars === '') {
       setError('Please enter the number of cars.');
       return;
     }
@@ -35,7 +35,7 @@ const FamilyCars: React.FC = () => {
         <TextField
           label="Number of cars"
           type="number"
-          value={familyCars}
+          value={userData.familyCars !== null ? userData.familyCars : ''} // Controlled input from context
           onChange={handleFamilyCarsChange}
           inputProps={{ min: '0' }} // Prevent negative numbers
         />
@@ -54,7 +54,7 @@ const FamilyCars: React.FC = () => {
         <Button
           variant="contained"
           onClick={handleNext}
-          disabled={familyCars === ''}
+          disabled={userData.familyCars === ''} // Disable if no number of cars is entered
         >
           Next
         </Button>

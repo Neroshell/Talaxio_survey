@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { TextField, Button, FormHelperText, FormControl } from '@mui/material';
+import { multiStepContext } from './ContextStep';
 
 interface AgeProps {
-  onNext: (age: number | '') => void; // Added onNext prop
+  onNext: (age: number | '') => void; // onNext prop for handling age submission
 }
 
 const Age: React.FC<AgeProps> = ({ onNext }) => {
-  const [age, setAge] = useState<number | ''>('');
+  const { userData, setUserData } = useContext(multiStepContext);
+  const [age, setAge] = useState<number | ''>(userData['age'] || ''); // Initial age from context
   const [error, setError] = useState<string | null>(null);
 
   const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,6 +24,7 @@ const Age: React.FC<AgeProps> = ({ onNext }) => {
     } else {
       setAge(ageValue);
       setError(null);
+      setUserData({ ...userData, age: ageValue }); // Update age in context
     }
   };
 
@@ -39,8 +42,8 @@ const Age: React.FC<AgeProps> = ({ onNext }) => {
             label="How old are you" 
             variant="outlined" 
             type="number" 
-            value={age} 
-            onChange={handleAgeChange} 
+            value={age} // Controlled input for age
+            onChange={handleAgeChange} // Updates age and context
             error={Boolean(error)} 
           />
           {error && <FormHelperText error>{error}</FormHelperText>}

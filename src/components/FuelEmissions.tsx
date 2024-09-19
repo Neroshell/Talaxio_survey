@@ -3,17 +3,17 @@ import { FormControl, FormControlLabel, Radio, RadioGroup, FormLabel, Button, Fo
 import { multiStepContext } from './ContextStep'; // Adjust the import path if necessary
 
 const FuelEmissions: React.FC = () => {
-  const { currentStep, setStep } = useContext(multiStepContext);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const { currentStep, setStep, userData, setUserData } = useContext(multiStepContext); // Access context
   const [error, setError] = useState<string | null>(null);
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedOption(event.target.value);
+    const selectedOption = event.target.value;
+    setUserData({ ...userData, fuelEmissions: selectedOption }); // Update context with selected option
     setError(null); // Clear the error when a valid option is selected
   };
 
   const handleNext = () => {
-    if (!selectedOption) {
+    if (!userData.fuelEmissions) {
       setError('Please select an option.');
       return;
     }
@@ -31,7 +31,7 @@ const FuelEmissions: React.FC = () => {
         <RadioGroup
           aria-label="fuel-emissions"
           name="fuel-emissions"
-          value={selectedOption || ''}
+          value={userData.fuelEmissions || ''} // Controlled input from context
           onChange={handleOptionChange}
         >
           <FormControlLabel value="yes" control={<Radio />} label="Yes" />
@@ -53,7 +53,7 @@ const FuelEmissions: React.FC = () => {
         <Button
           variant="contained"
           onClick={handleNext}
-          disabled={!selectedOption} // Disable if no option is selected
+          disabled={!userData.fuelEmissions} // Disable if no option is selected
         >
           Next
         </Button>

@@ -1,17 +1,18 @@
 // EachCar.tsx
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, TextField, Button, Typography, SelectChangeEvent } from '@mui/material';
+import { multiStepContext } from './ContextStep'; // Assuming you're using multiStepContext for step management
 import './components.css'; // Import your CSS file
 
 interface EachCarProps {
   carIndex: number;
   onCarDetailsChange: (index: number, carMake: string, carModel: string) => void;
-  onNext: () => void; // Added prop for Next button click
 }
 
 const carMakes = ['BMW', 'Toyota', 'Mercedes', 'Audi', 'Honda'];
 
-const EachCar: React.FC<EachCarProps> = ({ carIndex, onCarDetailsChange, onNext }) => {
+const EachCar: React.FC<EachCarProps> = ({ carIndex, onCarDetailsChange }) => {
+  const { currentStep, setStep } = useContext(multiStepContext); // Use context for step management
   const [carMake, setCarMake] = useState('');
   const [carModel, setCarModel] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -19,7 +20,7 @@ const EachCar: React.FC<EachCarProps> = ({ carIndex, onCarDetailsChange, onNext 
   const handleCarMakeChange = (event: SelectChangeEvent) => {
     const selectedMake = event.target.value;
     setCarMake(selectedMake);
-    setCarModel(''); // Reset the car model when a new car make is selected
+    setCarModel(''); // Reset car model when a new car make is selected
     setError(null); // Reset error if the make changes
     onCarDetailsChange(carIndex, selectedMake, ''); // Clear model on make change
   };
@@ -36,8 +37,13 @@ const EachCar: React.FC<EachCarProps> = ({ carIndex, onCarDetailsChange, onNext 
   };
 
   const handleNextClick = () => {
-    console.log("Next button clicked"); // Debugging log
-    onNext(); // Call onNext when Next is clicked
+    if (!error) {
+      setStep(currentStep + 1); // Move to the next step
+    }
+  };
+
+  const handleBackClick = () => {
+    setStep(currentStep - 1); // Go back to the previous step
   };
 
   return (
@@ -73,7 +79,7 @@ const EachCar: React.FC<EachCarProps> = ({ carIndex, onCarDetailsChange, onNext 
       )}
 
       <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
-        <Button variant="outlined" color="secondary" style={{ marginRight: '10px' }}>
+        <Button variant="outlined" color="secondary" onClick={handleBackClick} style={{ marginRight: '10px' }}>
           Back
         </Button>
         <Button
