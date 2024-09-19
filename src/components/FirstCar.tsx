@@ -3,7 +3,7 @@ import { FormControl, FormControlLabel, Radio, RadioGroup, FormLabel, Button, Fo
 import { multiStepContext } from './ContextStep'; // Adjust the import path if necessary
 
 interface FirstCarProps {
-  onNext: () => void; // Define the type of the onNext prop
+  onNext: (firstCar: string) => void; // Define the type of the onNext prop
 }
 
 const FirstCar: React.FC<FirstCarProps> = ({ onNext }) => {
@@ -22,15 +22,7 @@ const FirstCar: React.FC<FirstCarProps> = ({ onNext }) => {
       return;
     }
 
-    if (userData.firstCar === 'yes') {
-      // Update the context or do any additional logic here if needed
-      onNext(); // Call the onNext function passed as a prop
-      setStep(8); // Go to Thank You step if 'Yes' is selected
-    } else if (userData.firstCar === 'no') {
-      // Update the context or do any additional logic here if needed
-      onNext(); // Call the onNext function passed as a prop
-      setStep(currentStep + 1); // Go to DriveTrain step if 'No' is selected
-    }
+    onNext(userData.firstCar); // Pass the selected option to the onNext function
   };
 
   const handleBack = () => {
@@ -40,7 +32,7 @@ const FirstCar: React.FC<FirstCarProps> = ({ onNext }) => {
 
   return (
     <div className="form-container">
-      <FormControl sx={{width: '50%', margin: '0 auto'}} component="fieldset">
+      <FormControl sx={{ width: '50%', margin: '0 auto' }} component="fieldset">
         <FormLabel sx={{ fontWeight: 'bold' }}>Is this your first car?</FormLabel>
         <RadioGroup
           aria-label="first-car"

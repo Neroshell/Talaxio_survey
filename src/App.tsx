@@ -58,15 +58,17 @@ function App() {
 
   // Handle First Car Step Logic
   // Handle First Car Step Logic
-const handleFirstCarNext = () => {
-  if (userData.firstCar === 'yes') {
+// Handle First Car Step Logic
+const handleFirstCarNext = (firstCar: string) => {
+  if (firstCar === 'yes') {
     setThankYouMessage("We are targeting more experienced clients, thank you for your interest");
     setShowIcon(false); // Optionally hide the icon
     setStep(7); // Go to Thank You step if 'Yes' is selected
-  } else if (userData.firstCar === 'no') {
-    setStep(4); // Go to Drive Train step if 'No' is selected
+  } else if (firstCar === 'no') {
+    setStep(3); // Go to Drive Train step if 'No' is selected
   }
 };
+
 
 
   // Get content based on the step index
