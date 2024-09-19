@@ -1,5 +1,4 @@
-// App.tsx
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Stepper, Step, StepLabel } from '@mui/material';
 import Age from './components/Age';
 import Gender from './components/Gender';
@@ -17,7 +16,7 @@ const steps = [
   'Age',
   'Gender',
   'Car License',
-  'First Car',
+  'First Car', // Move First Car to step 4
   'Drive Train',
   'Fuel Emissions',
   'Family Cars',
@@ -27,30 +26,38 @@ const steps = [
 
 function App() {
   const { currentStep, setStep } = useContext(multiStepContext);
-
-  const handleAgeNext = (age: number | '') => {
-    if (age === '') {
-      return;
+  const [age, setAge] = useState<number | null>(null); // Track user's age
+  
+  // Handle Age Step Logic
+  const handleAgeNext = (userAge: number | '') => {
+    if (userAge === '' || isNaN(userAge)) {
+      return; // Do nothing if the age is not provided or invalid
     }
-    if (age < 18) {
-      setStep(8); // Go to Thank You step
+    setAge(userAge); // Save the age in state
+    if (userAge < 18) {
+      setStep(8); // Go to Thank You step if under 18
     } else {
-      setStep(1); // Go to Gender step
+      setStep(1); // Proceed to Gender step for age >= 18
     }
   };
-
+  
+  // Handle Car License Step Logic
   const handleCarLicenseNext = (licenseStatus: string) => {
     if (licenseStatus === 'no') {
-      setStep(8); // Go to Thank You step
+      setStep(8); // Go to Thank You step if no license
+    } else if (age !== null && age >= 18 && age <= 25) {
+      setStep(3); // Go to First Car step for age between 18 and 25
     } else {
-      setStep(3); // Go to First Car step
+      setStep(4); // Otherwise, go directly to Drive Train step
     }
   };
 
+  // Handle Each Car Step Logic
   const handleEachCarNext = () => {
-    setStep(8); // Go to Thank You step
+    setStep(8); // After the car details step, proceed to Thank You
   };
 
+  // Get content based on the step index
   const getStepContent = (stepIndex: number) => {
     switch (stepIndex) {
       case 0:
@@ -60,7 +67,7 @@ function App() {
       case 2:
         return <CarLicense onNext={handleCarLicenseNext} />;
       case 3:
-        return <FirstCar />;
+        return <FirstCar />; // First Car is now at step 4
       case 4:
         return <DriveTrain />;
       case 5:
@@ -70,15 +77,15 @@ function App() {
       case 7:
         return (
           <EachCar
-            carIndex={0} // Pass appropriate carIndex
+            carIndex={0}
             onCarDetailsChange={() => {}}
-            onNext={handleEachCarNext} // Call handleEachCarNext on Next
+            onNext={handleEachCarNext}
           />
         );
       case 8:
-        return <ThankYou message='You have finished. Thank you for participating!' />;
+        return <ThankYou message='The End. Thank you for participating!' />;
       default:
-        return <div>Unknown step</div>;
+        return <div>There is nothing here</div>;
     }
   };
 
