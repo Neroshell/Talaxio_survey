@@ -1,15 +1,20 @@
+// Age.tsx
 import React, { useState, useContext } from 'react';
-import { TextField, Button, FormHelperText, FormControl } from '@mui/material';
-import { multiStepContext } from './ContextStep';
+import { TextField, Button, FormHelperText, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { multiStepContext } from './ContextStep'; // Adjust the import path if necessary
 
-interface AgeProps {
-  onNext: (age: number | '') => void; // onNext prop for handling age submission
+// Define the type for user data
+interface UserData {
+  age: number | '';
+  gender: string;
 }
 
-const Age: React.FC<AgeProps> = ({ onNext }) => {
+const Age: React.FC<{ onNext: () => void; onBack: () => void }> = ({ onNext, onBack }) => {
   const { userData, setUserData } = useContext(multiStepContext);
-  const [age, setAge] = useState<number | ''>(userData['age'] || ''); // Initial age from context
-  const [error, setError] = useState<string | null>(null);
+  const [age, setAge] = useState<number | ''>(userData.age || '');
+  const [gender, setGender] = useState<string>(userData.gender || '');
+  const [ageError, setAgeError] = useState<string | null>(null);
+  const [genderError, setGenderError] = useState<string | null>(null);
 
   const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -17,20 +22,35 @@ const Age: React.FC<AgeProps> = ({ onNext }) => {
 
     if (value === '') {
       setAge('');
-      setError(null);
+      setAgeError(null);
     } else if (ageValue < 1 || ageValue > 100) {
       setAge(ageValue);
-      setError('Age must be between 1 and 100');
+      setAgeError('Age must be between 1 and 100');
     } else {
       setAge(ageValue);
-      setError(null);
-      setUserData({ ...userData, age: ageValue }); // Update age in context
+      setAgeError(null);
+      // Explicitly type the prev parameter
+      setUserData((prev: UserData) => ({ ...prev, age: ageValue }));
     }
   };
 
+  const handleGenderChange = (event: SelectChangeEvent<string>) => {
+    const selectedGender = event.target.value;
+    setGender(selectedGender);
+    setUserData((prev: UserData) => ({ ...prev, gender: selectedGender }));
+    setGenderError(null);
+  };
+
   const handleNextClick = () => {
-    if (error === null) {
-      onNext(age); // Call onNext with the current age value
+    if (ageError === null && gender !== '') {
+      onNext();
+    } else {
+      if (ageError) {
+        setAgeError(ageError); // Preserve existing age error if any
+      }
+      if (!gender) {
+        setGenderError('Please select a gender.');
+      }
     }
   };
 
@@ -42,11 +62,28 @@ const Age: React.FC<AgeProps> = ({ onNext }) => {
             label="How old are you" 
             variant="outlined" 
             type="number" 
-            value={age} // Controlled input for age
-            onChange={handleAgeChange} // Updates age and context
-            error={Boolean(error)} 
+            value={age} 
+            onChange={handleAgeChange} 
+            error={Boolean(ageError)} 
           />
-          {error && <FormHelperText error>{error}</FormHelperText>}
+          {ageError && <FormHelperText error>{ageError}</FormHelperText>}
+        </FormControl>
+
+        <FormControl fullWidth sx={{ width: '50%', margin: '0 auto', marginTop: '20px' }} error={Boolean(genderError)}>
+          <InputLabel id="gender-select-label">Select your gender</InputLabel>
+          <Select
+            labelId="gender-select-label"
+            id="gender-select"
+            value={gender}
+            onChange={handleGenderChange}
+            label="Select your gender"
+          >
+            <MenuItem value="male">Male</MenuItem>
+            <MenuItem value="female">Female</MenuItem>
+            <MenuItem value="non-binary">Non-binary</MenuItem>
+            <MenuItem value="prefer-not-to-say">Prefer not to say</MenuItem>
+          </Select>
+          {genderError && <FormHelperText>{genderError}</FormHelperText>}
         </FormControl>
       </div>
 
@@ -54,15 +91,15 @@ const Age: React.FC<AgeProps> = ({ onNext }) => {
         <Button
           variant="outlined"
           style={{ marginRight: '10px' }}
-          disabled
+          onClick={onBack}
         >
           Back
         </Button>
 
         <Button
           variant="contained"
-          disabled={Boolean(error)}
           onClick={handleNextClick}
+          disabled={Boolean(ageError) || !gender} // Disable next if age is invalid or gender is not selected
         >
           Next
         </Button>

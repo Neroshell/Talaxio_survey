@@ -1,7 +1,7 @@
+// App.tsx
 import React, { useContext, useState } from 'react';
 import { Stepper, Step, StepLabel } from '@mui/material';
 import Age from './components/Age';
-import Gender from './components/Gender';
 import CarLicense from './components/CarLicense';
 import FirstCar from './components/FirstCar';
 import DriveTrain from './components/DriveTrain';
@@ -14,7 +14,6 @@ import { multiStepContext } from './components/ContextStep';
 
 const steps = [
   'Age',
-  'Gender',
   'Car License',
   'First Car',
   'Drive Train',
@@ -30,15 +29,15 @@ function App() {
   const [showIcon, setShowIcon] = useState<boolean>(true);
 
   // Handle Age Step Logic
-  const handleAgeNext = (userAge: number | '') => {
-    if (userAge === '' || isNaN(userAge)) {
+  const handleAgeNext = () => {
+    const { age } = userData;
+    if (age === '' || isNaN(age as number)) {
       return; // Do nothing if the age is not provided or invalid
     }
-    setUserData(prev => ({ ...prev, age: userAge })); // Save the age in context
-    if (userAge < 18) {
-      setThankYouMessage("We are targeting more experienced clients, thank you for your interest");
+    if (age < 18) {
+      setThankYouMessage("Thank you for your interest");
       setShowIcon(false); // Optionally hide the icon
-      setStep(8); // Go to Thank You step if under 18
+      setStep(7); // Go to Thank You step if under 18
     } else {
       setStep(1); // Proceed to Car License step for age >= 18
     }
@@ -49,58 +48,50 @@ function App() {
     if (licenseStatus === 'no') {
       setThankYouMessage("Thank you for your interest");
       setShowIcon(true); // Optionally hide the icon
-      setStep(8); // Go to Thank You step if no license or prefer transport
+      setStep(7); // Go to Thank You step if no license or prefer transport
     } else if (userData.age !== null && userData.age >= 18 && userData.age <= 25) {
-      setStep(3); // Go to First Car step for age between 18 and 25
+      setStep(2); // Go to First Car step for age between 18 and 25
     } else {
-      setStep(4); // Otherwise, go directly to Drive Train step
+      setStep(3); // Otherwise, go directly to Drive Train step
     }
   };
 
   // Handle First Car Step Logic
-  const handleFirstCarNext = () => {
-    if (userData.firstCar === 'yes') {
-      setThankYouMessage("We are targeting more experienced clients, thank you for your interest");
-      setShowIcon(false); // Optionally hide the icon
-      setStep(8); // Go to Thank You step if 'Yes' is selected
-    } else if (userData.firstCar === 'no') {
-      setStep(4); // Go to Drive Train step if 'No' is selected
-    }
-  };
+  // Handle First Car Step Logic
+const handleFirstCarNext = () => {
+  if (userData.firstCar === 'yes') {
+    setThankYouMessage("We are targeting more experienced clients, thank you for your interest");
+    setShowIcon(false); // Optionally hide the icon
+    setStep(7); // Go to Thank You step if 'Yes' is selected
+  } else if (userData.firstCar === 'no') {
+    setStep(4); // Go to Drive Train step if 'No' is selected
+  }
+};
 
-
-
-  // Handle Each Car Step Logic
-  const handleEachCarNext = () => {
-    setStep(8); // After the car details step, proceed to Thank You
-  };
 
   // Get content based on the step index
   const getStepContent = (stepIndex: number) => {
     switch (stepIndex) {
       case 0:
-        return <Age onNext={handleAgeNext} />;
+        return <Age onNext={handleAgeNext} onBack={() => setStep(0)} />;
       case 1:
-        return <Gender />;
-      case 2:
         return <CarLicense onNext={handleCarLicenseNext} />;
-      case 3:
+      case 2:
         return <FirstCar onNext={handleFirstCarNext} />;
-      case 4:
+      case 3:
         return <DriveTrain />;
-      case 5:
+      case 4:
         return <FuelEmissions />;
-      case 6:
+      case 5:
         return <FamilyCars />;
-      case 7:
+      case 6:
         return (
           <EachCar
             carIndex={0}
             onCarDetailsChange={() => {}}
-            onNext={handleEachCarNext}
           />
         );
-      case 8:
+      case 7:
         return <ThankYou message={thankYouMessage || 'Thank you for your participation!'} showIcon={showIcon} />;
       default:
         return <div>There is nothing here</div>;

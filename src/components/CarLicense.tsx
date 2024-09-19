@@ -41,7 +41,7 @@ const CarLicense: React.FC<CarLicenseProps> = ({ onNext }) => {
           onChange={handleLicenseChange} // Update license status in context
         >
           <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-          <FormControlLabel value="no" control={<Radio />} label="No, I prefer not to say" />
+          <FormControlLabel value="no" control={<Radio />} label="No, I prefer public transport" />
          
         </RadioGroup>
         {error && <FormHelperText error>{error}</FormHelperText>}

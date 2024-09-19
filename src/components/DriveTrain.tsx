@@ -1,5 +1,6 @@
+// src/components/DriveTrain.tsx
 import React, { useState, useContext } from 'react';
-import { FormControl, FormLabel, MenuItem, Select, TextField, Button, FormHelperText, SelectChangeEvent } from '@mui/material';
+import { FormControl, FormLabel, MenuItem, Select, Button, FormHelperText, SelectChangeEvent } from '@mui/material';
 import { multiStepContext } from './ContextStep'; // Adjust the import path if necessary
 import './components.css'; // Import your CSS file
 
@@ -8,21 +9,15 @@ const DriveTrain: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Update the drivetrain preference in the context
-  const handleDrivetrainChange = (event: SelectChangeEvent) => {
-    const drivetrain = event.target.value as string;
+  const handleDrivetrainChange = (event: SelectChangeEvent<string>) => {
+    const drivetrain = event.target.value;
     setUserData({ ...userData, drivetrain }); // Update context with drivetrain preference
     setError(null); // Clear error when valid input is selected
   };
 
-  // Update the number of family cars in the context
-  const handleFamilyCarsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const familyCars = event.target.value === '' ? '' : Number(event.target.value);
-    setUserData({ ...userData, familyCars }); // Update context with family cars count
-  };
-
   const handleNext = () => {
-    if (!userData.drivetrain || userData.familyCars === '') {
-      setError('Please complete all fields.');
+    if (!userData.drivetrain) {
+      setError('Please select a drivetrain.');
       return;
     }
     setStep(currentStep + 1); // Move to the next step
@@ -37,7 +32,7 @@ const DriveTrain: React.FC = () => {
       <FormControl component="fieldset" sx={{ marginBottom: '16px' }}>
         <FormLabel sx={{ fontWeight: 'bold' }}>Which drivetrain do you prefer?</FormLabel>
         <Select
-          sx={{ height: '40px'}}
+          sx={{ height: '40px' }}
           value={userData.drivetrain || ''} // Controlled input from context
           onChange={handleDrivetrainChange}
           variant="outlined"
@@ -47,18 +42,6 @@ const DriveTrain: React.FC = () => {
           <MenuItem value="rwd">RWD</MenuItem>
           <MenuItem value="unknown">I don't know</MenuItem>
         </Select>
-      </FormControl>
-
-      <FormControl component="fieldset">
-        <FormLabel sx={{ fontWeight: 'bold' }}>How many cars do you have in your family?</FormLabel>
-        <TextField
-          type="number"
-          value={userData.familyCars}
-          onChange={handleFamilyCarsChange}
-          variant="outlined"
-          fullWidth
-          InputProps={{ inputProps: { min: 0 } }} // Prevent negative numbers
-        />
         {error && <FormHelperText error>{error}</FormHelperText>}
       </FormControl>
 
@@ -74,7 +57,7 @@ const DriveTrain: React.FC = () => {
         <Button
           variant="contained"
           onClick={handleNext}
-          disabled={!userData.drivetrain || userData.familyCars === ''}
+          disabled={!userData.drivetrain}
         >
           Next
         </Button>
