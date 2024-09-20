@@ -11,6 +11,8 @@ import ThankYou from './components/FinalThanks';
 import EachCar from './components/EachCar';
 import './App.css';
 import { multiStepContext } from './components/ContextStep';
+import Dashboard from './components/Dashboard';
+
 
 const steps = [
   'Age',
@@ -24,9 +26,11 @@ const steps = [
 ];
 
 function App() {
-  const { currentStep, setStep, userData, setUserData } = useContext(multiStepContext); // Access context
+  const { currentStep, setStep, userData, submitData, setUserData  } = useContext(multiStepContext);
+
   const [thankYouMessage, setThankYouMessage] = useState<string | null>(null);
   const [showIcon, setShowIcon] = useState<boolean>(true);
+  const [submitted, setSubmitted] = useState(false);
 
   // Handle Age Step Logic
   const handleAgeNext = () => {
@@ -34,7 +38,11 @@ function App() {
     if (age === '' || isNaN(age as number)) {
       return; // Do nothing if the age is not provided or invalid
     }
+
+   
+
     if (age < 18) {
+      submitData();
       setThankYouMessage("Thank you for your interest");
       setShowIcon(false); // Optionally hide the icon
       setStep(7); // Go to Thank You step if under 18
@@ -42,32 +50,49 @@ function App() {
       setStep(1); // Proceed to Car License step for age >= 18
     }
   };
+ 
 
   // Handle Car License Step Logic
   const handleCarLicenseNext = (licenseStatus: string) => {
-    if (licenseStatus === 'no') {
-      setThankYouMessage("Thank you for your interest");
-      setShowIcon(true); // Optionally hide the icon
-      setStep(7); // Go to Thank You step if no license or prefer transport
+    if (licenseStatus === 'no' && !submitted) {
+      console.log('handleCarLicenseNext called');
+      submitData();
+      setSubmitted(true); // Prevent further submissions
+      setStep(7); // Go to Thank You step
     } else if (userData.age !== null && userData.age >= 18 && userData.age <= 25) {
-      setStep(2); // Go to First Car step for age between 18 and 25
+      setStep(2);
     } else {
-      setStep(3); // Otherwise, go directly to Drive Train step
+      setStep(3);
     }
   };
-
-  // Handle First Car Step Logic
-  // Handle First Car Step Logic
-// Handle First Car Step Logic
+  
+  
+ 
 const handleFirstCarNext = (firstCar: string) => {
   if (firstCar === 'yes') {
+    submitData();
     setThankYouMessage("We are targeting more experienced clients, thank you for your interest");
-    setShowIcon(false); // Optionally hide the icon
+    setShowIcon(true); // Optionally hide the icon
     setStep(7); // Go to Thank You step if 'Yes' is selected
   } else if (firstCar === 'no') {
     setStep(3); // Go to Drive Train step if 'No' is selected
   }
 };
+
+const handleFuelEmissionNext = (fuelEmissions: string) => {
+  if (fuelEmissions === 'yes' && !submitted) {
+  
+    setSubmitted(true); // Intermediate submission
+    setStep(6); // Proceed to next step
+  } else {
+   // Final submission
+    setStep(3); 
+  }
+};
+
+
+
+
 
 
 
@@ -83,7 +108,7 @@ const handleFirstCarNext = (firstCar: string) => {
       case 3:
         return <DriveTrain />;
       case 4:
-        return <FuelEmissions />;
+        return <FuelEmissions onNext={handleFuelEmissionNext} />;
       case 5:
         return <FamilyCars />;
       case 6:
@@ -113,7 +138,11 @@ const handleFirstCarNext = (firstCar: string) => {
       <div style={{ width: "50%", margin: '0 auto' }} className="step-content">
         {getStepContent(currentStep)}
       </div>
+        
+        <Dashboard />
     </div>
+
+   
   );
 }
 

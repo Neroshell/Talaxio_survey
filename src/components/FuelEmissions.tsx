@@ -2,7 +2,11 @@ import React, { useState, useContext } from 'react';
 import { FormControl, FormControlLabel, Radio, RadioGroup, FormLabel, Button, FormHelperText } from '@mui/material';
 import { multiStepContext } from './ContextStep'; // Adjust the import path if necessary
 
-const FuelEmissions: React.FC = () => {
+interface FuelEmissionsProps {
+  onNext: (fuelEmissions: string) => void; // Add onNext prop type
+}
+
+const FuelEmissions: React.FC<FuelEmissionsProps> = ({ onNext }) => {
   const { currentStep, setStep, userData, setUserData } = useContext(multiStepContext); // Access context
   const [error, setError] = useState<string | null>(null);
 
@@ -17,6 +21,7 @@ const FuelEmissions: React.FC = () => {
       setError('Please select an option.');
       return;
     }
+    onNext(userData.fuelEmissions); // Call onNext with the selected option
     setStep(currentStep + 1); // Move to the next step
   };
 
