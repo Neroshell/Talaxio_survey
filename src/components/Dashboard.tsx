@@ -28,7 +28,7 @@ interface UserData {
   fuelEmissionConcerned: boolean;
 }
 
-const Dashboard: React.FC = () => {
+const DashBoard: React.FC = () => {
   const {
     finalData,
     adolescentCount,
@@ -241,4 +241,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default DashBoard;

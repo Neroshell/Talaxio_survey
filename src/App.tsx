@@ -11,7 +11,7 @@ import ThankYou from './components/FinalThanks';
 import EachCar from './components/EachCar';
 import './App.css';
 import { multiStepContext } from './components/ContextStep';
-import Dashboard from './components/DashBoard';
+import DashBoard from './components/DashBoard';
 
 const steps = [
   'Age',
@@ -131,7 +131,7 @@ function App() {
               </Grid>
             </>
           } />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<DashBoard />} />
         </Routes>
       </Box>
     </Router>
