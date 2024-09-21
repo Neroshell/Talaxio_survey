@@ -61,7 +61,7 @@ const ContextStep: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       }
   
       if (currentStep === totalSteps - 1) {  // If user is at the last step
-        setUserData((prevData) => ({ ...prevData, completedSurvey: true }));
+        setUserData(() => ({ ...prevData, completedSurvey: true }));
         setTargetableCount((prevCount: number) => prevCount + 1);
       }
   

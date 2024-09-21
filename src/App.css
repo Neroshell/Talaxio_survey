@@ -7,7 +7,7 @@
     justify-content: center;
     flex-direction: column;
     gap: 30px;
-    border: 1px solid green;
+   
     height: 100vh;
     
     
@@ -17,6 +17,6 @@
 @media only screen and (max-width: 480px) {
     .main-box {
       width: 100%; /* Set width to 80% on phone screens */
-      border: 1px solid red;
+      
     }
   }
