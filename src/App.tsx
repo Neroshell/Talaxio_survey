@@ -11,7 +11,7 @@ import ThankYou from './components/FinalThanks';
 import EachCar from './components/EachCar';
 import './App.css';
 import { multiStepContext } from './components/ContextStep';
-import DashBoard from './components/DashBoard';
+import DashBoard from './components/DashBoard.tsx';
 
 const steps = [
   'Age',
