@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import  { useContext, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Stepper, Step, StepLabel } from '@mui/material';
+import { Stepper, Step, StepLabel, Box, Button, Grid } from '@mui/material';
 import Age from './components/Age';
 import CarLicense from './components/CarLicense';
 import FirstCar from './components/FirstCar';
@@ -11,8 +11,7 @@ import ThankYou from './components/FinalThanks';
 import EachCar from './components/EachCar';
 import './App.css';
 import { multiStepContext } from './components/ContextStep';
-import Dashboard from './components/Dashboard';
-import { Button } from '@mui/material';
+import Dashboard from './components/DashBoard';
 
 const steps = [
   'Age',
@@ -93,7 +92,7 @@ function App() {
       case 5:
         return <FamilyCars />;
       case 6:
-        return <EachCar carIndex={0} onCarDetailsChange={() => {}} />;
+        return <EachCar carIndex={0}  />;
       case 7:
         return <ThankYou message={thankYouMessage || 'Thank you for your participation!'} showIcon={showIcon} />;
       default:
@@ -103,30 +102,38 @@ function App() {
 
   return (
     <Router>
-      <div className='main-box'>
+      <Box className='main-box'>
         <Routes>
           <Route path="/" element={
             <>
-              <Stepper style={{ width: '50%' }} activeStep={currentStep} alternativeLabel>
-                {steps.map((label, index) => (
-                  <Step key={label} active={index === currentStep}>
-                    <StepLabel>{label}</StepLabel>
-                  </Step>
-                ))}
-              </Stepper>
-              <div style={{ width: "50%", margin: '0 auto' }} className="step-content">
-                {getStepContent(currentStep)}
-              </div>
-              <Link to="/dashboard">
-              <Button variant="contained" color="primary">
-                   Go to Dashboard
-                </Button>
-              </Link>
+              <Grid container justifyContent="center">
+                <Grid item xs={12} sm={10} md={8}>
+                  <Stepper activeStep={currentStep} alternativeLabel>
+                    {steps.map((label, index) => (
+                      <Step key={label} active={index === currentStep}>
+                        <StepLabel>{label}</StepLabel>
+                      </Step>
+                    ))}
+                  </Stepper>
+                </Grid>
+              </Grid>
+              <Grid container justifyContent="center">
+                <Grid item xs={12} sm={10} md={8} className="step-content">
+                  {getStepContent(currentStep)}
+                </Grid>
+              </Grid>
+              <Grid container justifyContent="center" sx={{ mt: 2 }}>
+                <Link to="/dashboard" style={{ textDecoration: 'none' }}>
+                  <Button variant="contained" color="primary">
+                    Go to Dashboard
+                  </Button>
+                </Link>
+              </Grid>
             </>
           } />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
-      </div>
+      </Box>
     </Router>
   );
 }
