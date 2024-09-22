@@ -10,6 +10,12 @@ import {
 } from '@mui/material';
 import { multiStepContext } from './ContextStep';
 import './components.css';
+import BarChart from './BarChart';
+
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
+
+// Register Chart.js components
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 interface Car {
   carMake: string;
@@ -99,6 +105,19 @@ const DashBoard: React.FC = () => {
   finalData.forEach((user, index) => {
     console.log(`User ${index}:`, user.fuelEmissionConcerned);
   });
+
+  const chartData = {
+    labels: ['Adolescents', 'Unlicensed', 'First-Car Owners', 'Targetables', 'TotalParticipants'],
+    datasets: [
+      {
+        label: 'Number of Participants',
+        data: [adolescentCount, unlicensedCount, FirstTimeOwnerCount, targetableCount, totalParticipants ],
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
 
   return (
     <Container sx={{ mt: 5 }}>
@@ -246,6 +265,17 @@ const DashBoard: React.FC = () => {
                   </ListItem>
                 ))}
               </List>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Card sx={{ boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '32px' }}>
+            <CardContent>
+              <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
+                Participant Statistics
+              </Typography>
+              <BarChart data={chartData} /> {/* Render the chart */}
             </CardContent>
           </Card>
         </Grid>
