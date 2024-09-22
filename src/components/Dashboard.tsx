@@ -25,7 +25,8 @@ interface UserData {
   fuelEmissions: string; 
   eachCar?: Car[];
   completedSurvey: boolean;
-  fuelEmissionConcerned: boolean;
+  fuelEmissionConcerned: string;
+  
 }
 
 const DashBoard: React.FC = () => {
@@ -36,14 +37,21 @@ const DashBoard: React.FC = () => {
     FirstTimeOwnerCount,
     targetableCount,
     averageFamilyCars,
+    fuelEmissionConcernedCount,
+    driveTrainCount,
+ 
   } = useContext(multiStepContext) as {
     finalData: UserData[];
     adolescentCount: number;
     unlicensedCount: number;
     FirstTimeOwnerCount: number;
     fuelEmissionConcernedCount: number;
+    driveTrainCount: number;
     targetableCount: number;
     averageFamilyCars: number;
+  
+  
+   
   };
 
   // Save data to local storage whenever finalData changes
@@ -66,12 +74,15 @@ const DashBoard: React.FC = () => {
   const firstTimeOwnerPercentage = totalParticipants > 0 ? (FirstTimeOwnerCount / totalParticipants) * 100 : 0;
   const targetablePercentage = totalParticipants > 0 ? (targetableCount / totalParticipants) * 100 : 0;
 
-  const targetableUsers = finalData.filter(user => user.age >= 18 && user.completedSurvey);
-  const targetableFWDorDontKnow = targetableUsers.filter(user => user.driveTrain === 'FWD' || user.driveTrain === "I don't know");
-  const fwdOrDontKnowPercentage = targetableUsers.length > 0 ? (targetableFWDorDontKnow.length / targetableUsers.length) * 100 : 0;
-  const caringAboutEmissionsCount = targetableUsers.filter(user => user.fuelEmissions === 'yes').length;
+  const fuelEmissionConcernedPercentage = totalParticipants > 0 
+  ? (fuelEmissionConcernedCount / totalParticipants) * 100 
+  : 0;
 
-  const emissionsConcernedPercentage = targetableUsers.length > 0 ? (caringAboutEmissionsCount / targetableUsers.length) * 100 : 0;
+  const driveTrainPercentage = totalParticipants > 0
+  ? (driveTrainCount / totalParticipants) * 100
+  : 0; // Ensure it returns 0 instead of NaN
+  
+  
   const carMakeDistribution: { [key: string]: number } = {};
   const carModelDistribution: { [key: string]: number } = {};
 
@@ -90,8 +101,8 @@ const DashBoard: React.FC = () => {
   });
 
   return (
-    <Container sx={{ mt: 4 }}>
-      <Typography variant="h4" sx={{ textAlign: 'center', mb: 4 }}>
+    <Container sx={{ mt: 5 }}>
+      <Typography variant="h5" sx={{ textAlign: 'center', mb: 4 }}>
         Staff Requirements Overview
       </Typography>
 
@@ -139,7 +150,7 @@ const DashBoard: React.FC = () => {
           <Card sx={{ height: '130px', boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '12px' }}>
             <CardContent>
               <Typography variant="h6" color="text.secondary">
-                First-Time Owners
+                First-Car Owners
               </Typography>
               <Typography variant="h4" sx={{ color: '#4caf50', fontWeight: 'bold' }}>
                 {FirstTimeOwnerCount} ({firstTimeOwnerPercentage.toFixed(2)}%)
@@ -156,7 +167,9 @@ const DashBoard: React.FC = () => {
                 Concerned About Fuel Emissions
               </Typography>
               <Typography variant="h4" sx={{ color: '#673ab7', fontWeight: 'bold' }}>
-              {caringAboutEmissionsCount} ({emissionsConcernedPercentage.toFixed(2)}%)
+
+              {fuelEmissionConcernedCount} ({fuelEmissionConcernedPercentage.toFixed(2)}%)
+              
               </Typography>
             </CardContent>
           </Card>
@@ -195,7 +208,7 @@ const DashBoard: React.FC = () => {
                 Targetable FWD or "I don't know"
               </Typography>
               <Typography variant="h4" sx={{ color: '#8e24aa', fontWeight: 'bold' }}>
-              {fwdOrDontKnowPercentage.toFixed(2)}%
+                   {driveTrainCount}   ({driveTrainPercentage.toFixed(2)}%)
               </Typography>
             </CardContent>
           </Card>

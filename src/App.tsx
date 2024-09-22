@@ -25,7 +25,7 @@ const steps = [
 ];
 
 function App() {
-  const { currentStep, setStep, userData, submitData } = useContext(multiStepContext);
+  const { currentStep, setStep, userData, submitData, submitFuelEmissionNext, submitDrivetrainNext  } = useContext(multiStepContext);
   
   const [thankYouMessage, setThankYouMessage] = useState<string | null>(null);
   const [showIcon, setShowIcon] = useState<boolean>(true);
@@ -69,13 +69,31 @@ function App() {
   };
 
   const handleFuelEmissionNext = (fuelEmissions: string) => {
-    if (fuelEmissions === 'yes' && !submitted) {
-      setSubmitted(true);
-      setStep(6);
-    } else {
-      setStep(3);
+    // Update the form data with the user's fuel emission response
+  
+    // Check if the user is concerned about fuel emissions
+    if (fuelEmissions === 'yes') {
+      // Call the function to handle fuel emission concerns
+      submitFuelEmissionNext(fuelEmissions);
     }
+  
+    // Move to the next step (assumed to be FamilyCars)
+    setStep(5); 
   };
+  
+  const handleDrivetrainNext = (driveTrain: string) => {
+ 
+    // Check if the user selected "FWD" or "I don't know" for the drivetrain
+    if (driveTrain === 'FWD' || driveTrain === "I don't know") {
+        // Call the function to handle the drivetrain response count
+        submitDrivetrainNext(driveTrain);
+      
+    }
+
+    // Move to the next step (assumed to be FuelEmissions)
+    setStep(6); 
+};
+
 
   const getStepContent = (stepIndex: number) => {
     switch (stepIndex) {
@@ -86,7 +104,7 @@ function App() {
       case 2:
         return <FirstCar onNext={handleFirstCarNext} />;
       case 3:
-        return <DriveTrain />;
+        return <DriveTrain onNext={handleDrivetrainNext} />;
       case 4:
         return <FuelEmissions onNext={handleFuelEmissionNext} />;
       case 5:
@@ -102,10 +120,9 @@ function App() {
 
   return (
     <Router>
-      <Box className='main-box'>
         <Routes>
           <Route path="/" element={
-            <>
+            <Box className='main-box'>
               <Grid container justifyContent="center">
                 <Grid item xs={12} sm={10} md={8}>
                   <Stepper activeStep={currentStep} alternativeLabel>
@@ -117,7 +134,7 @@ function App() {
                   </Stepper>
                 </Grid>
               </Grid>
-              <Grid container justifyContent="center">
+              <Grid container  justifyContent="center">
                 <Grid item xs={12} sm={10} md={8} className="step-content">
                   {getStepContent(currentStep)}
                 </Grid>
@@ -129,11 +146,11 @@ function App() {
                   </Button>
                 </Link>
               </Grid>
-            </>
+            </Box>
           } />
           <Route path="/dashboard" element={<DashBoard />} />
         </Routes>
-      </Box>
+      
     </Router>
   );
 }

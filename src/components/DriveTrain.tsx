@@ -4,7 +4,11 @@ import { FormControl, FormLabel, MenuItem, Select, Button, FormHelperText, Selec
 import { multiStepContext } from './ContextStep'; // Adjust the import path if necessary
 import './components.css'; // Import your CSS file
 
-const DriveTrain: React.FC = () => {
+interface DriveTrainProps {
+  onNext: (driveTrain: string) => void; // Add onNext prop type
+}
+
+const DriveTrain: React.FC<DriveTrainProps> = ({ onNext }) => {  // Add onNext prop here
   const { currentStep, setStep, userData, setUserData } = useContext(multiStepContext); // Access context
   const [error, setError] = useState<string | null>(null);
 
@@ -20,7 +24,11 @@ const DriveTrain: React.FC = () => {
       setError('Please select a drivetrain.');
       return;
     }
-    setStep(currentStep + 1); // Move to the next step
+    // Call onNext prop function to handle the drivetrain response
+    onNext(userData.drivetrain);
+
+    // Move to the next step
+    setStep(currentStep + 1);
   };
 
   const handleBack = () => {
