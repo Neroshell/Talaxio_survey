@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, Button, FormHelperText, SelectChangeEvent } from '@mui/material';
-import { multiStepContext } from './ContextStep'; // Adjust the import path if necessary
+import { multiStepContext } from './ContextStep'; 
 
 const Gender: React.FC = () => {
   const { currentStep, setStep, userData, setUserData } = useContext(multiStepContext); // Access context

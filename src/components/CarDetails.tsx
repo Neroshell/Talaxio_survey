@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Typography, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
-import './components.css'; // Import your CSS file
+import './components.css'; 
 
 interface CarDetailsProps {
   numberOfCars: number;

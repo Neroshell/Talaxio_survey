@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { TextField, Typography, Button, FormControl, FormHelperText } from '@mui/material';
-import { multiStepContext } from './ContextStep'; // Adjust the import path if necessary
-import './components.css'; // Import your CSS file
+import { multiStepContext } from './ContextStep'; 
+import './components.css'; 
 
 const FamilyCars: React.FC = () => {
   const { currentStep, setStep, userData, setUserData } = useContext(multiStepContext); // Access context

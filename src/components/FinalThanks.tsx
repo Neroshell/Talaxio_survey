@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Box } from '@mui/material';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'; // Icon import
-import './components.css'; // Your custom styles
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'; 
+import './components.css'; 
 
 interface ThankYouProps {
   message: string;

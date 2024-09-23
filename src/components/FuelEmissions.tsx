@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { FormControl, FormControlLabel, Radio, RadioGroup, FormLabel, Button, FormHelperText } from '@mui/material';
-import { multiStepContext } from './ContextStep'; // Adjust the import path if necessary
+import { multiStepContext } from './ContextStep'; 
 
 interface FuelEmissionsProps {
   onNext: (fuelEmissions: string) => void; // Add onNext prop type

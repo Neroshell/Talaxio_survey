@@ -28,7 +28,7 @@ const ContextStep: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     ? finalData.reduce((total, data) => total + (data.familyCars || 0), 0) / finalData.reduce((count, data) => count + (data.familyCars ? 1 : 0), 0)
     : 0;
 
-  // Percentage calculation for fuel emission concerned users
+ 
  
 
   // Save finalData and counts to local storage whenever they change
@@ -142,14 +142,13 @@ const ContextStep: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       adolescentCount, 
       unlicensedCount, 
       FirstTimeOwnerCount, 
-      averageFamilyCars, // Provide average to context
+      averageFamilyCars, 
       targetableCount,
       fuelEmissionConcernedCount, 
       driveTrainCount
      
      
-       // Expose this variable
-   // Provide percentage to context
+   
     }}>
       {children}
     </multiStepContext.Provider>

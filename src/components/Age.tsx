@@ -1,7 +1,7 @@
 // Age.tsx
 import React, { useState, useContext } from 'react';
 import { TextField, Button, FormHelperText, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { multiStepContext } from './ContextStep'; // Adjust the import path if necessary
+import { multiStepContext } from './ContextStep'; 
 
 // Define the type for user data
 interface UserData {

@@ -1,15 +1,14 @@
-// src/components/DriveTrain.tsx
 import React, { useState, useContext } from 'react';
 import { FormControl, FormLabel, MenuItem, Select, Button, FormHelperText, SelectChangeEvent } from '@mui/material';
-import { multiStepContext } from './ContextStep'; // Adjust the import path if necessary
-import './components.css'; // Import your CSS file
+import { multiStepContext } from './ContextStep'; 
+import './components.css'; 
 
 interface DriveTrainProps {
-  onNext: (driveTrain: string) => void; // Add onNext prop type
+  onNext: (driveTrain: string) => void; 
 }
 
-const DriveTrain: React.FC<DriveTrainProps> = ({ onNext }) => {  // Add onNext prop here
-  const { currentStep, setStep, userData, setUserData } = useContext(multiStepContext); // Access context
+const DriveTrain: React.FC<DriveTrainProps> = ({ onNext }) => {  
+  const { currentStep, setStep, userData, setUserData } = useContext(multiStepContext); 
   const [error, setError] = useState<string | null>(null);
 
   // Update the drivetrain preference in the context

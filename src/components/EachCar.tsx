@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, TextField, Button, Typography, SelectChangeEvent } from '@mui/material';
-import { multiStepContext } from './ContextStep'; // Context for global state
+import { multiStepContext } from './ContextStep'; 
 
 const carMakes = ['BMW', 'Toyota', 'Mercedes', 'Audi', 'Honda'];
 
