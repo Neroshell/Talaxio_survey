@@ -235,7 +235,7 @@ const DashBoard: React.FC = () => {
 
         {/* Car Make Distribution */}
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ height: '130px', boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '12px' }}>
+          <Card sx={{ height: 'auto', boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '12px' }}>
             <CardContent>
               <Typography variant="h6" color="text.secondary">
                 Car Make Distribution
@@ -253,7 +253,7 @@ const DashBoard: React.FC = () => {
 
         {/* Car Model Distribution */}
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ height: '130px', boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '12px' }}>
+          <Card sx={{ height: 'auto', boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '12px' }}>
             <CardContent>
               <Typography variant="h6" color="text.secondary">
                 Car Model Distribution
