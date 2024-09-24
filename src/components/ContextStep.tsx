@@ -18,9 +18,6 @@ const ContextStep: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [targetableCount, setTargetableCount] = useState(initialCounts.targetableCount || 0);
   const [fuelEmissionConcernedCount, setFuelEmissionConcernedCount] = useState<number>(initialCounts.fuelEmissionConcernedCount || 0);
   const [driveTrainCount, setDrivetrainCount] = useState<number>(initialCounts.driveTrainCount || 0);
-
-
-  
   const totalSteps = 7;
 
   // Average calculation based on total cars and number of users
@@ -77,7 +74,7 @@ const ContextStep: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         console.log('fuelemission Counted:', userData.fuelEmissionCounted); 
       }
     
-      if ((userData.drivetrain === 'fwd' || userData.drivetrain === "I don't know") && !userData.drivetrainCounted) {
+      if ((userData.drivetrain === 'fwd' || userData.drivetrain === "unknown") && !userData.drivetrainCounted) {
         console.log('Update drivetrain count at final step');
         setDrivetrainCount((prevCount: number) => prevCount + 1);
         setUserData((prevData: any) => ({ ...prevData, drivetrainCounted: true }));
