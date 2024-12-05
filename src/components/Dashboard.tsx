@@ -130,7 +130,7 @@ const DashBoard: React.FC = () => {
           <Card sx={{ height: '130px', boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '12px' }}>
             <CardContent>
               <Typography variant="h6" color="text.secondary">
-                Total Participants
+                Total Participant
               </Typography>
               <Typography variant="h4" sx={{ color: '#1976d2', fontWeight: 'bold' }}>
                 {totalParticipants}
